@@ -12,7 +12,6 @@ fun CalculatorApp() {
     var display by remember { mutableStateOf("0") }
     var operation by remember { mutableStateOf<Char?>(null) }
     var firstOperand by remember { mutableStateOf(0.0) }
-    var secondOperand by remember { mutableStateOf(0.0) }
     var resetDisplay by remember { mutableStateOf(false) }
 
     fun onDigitPress(digit: Int) {
@@ -31,7 +30,7 @@ fun CalculatorApp() {
     }
 
     fun onEqualPress() {
-        secondOperand = display.toDouble()
+        val secondOperand = display.toDouble()
         display = when (operation) {
             '+' -> (firstOperand + secondOperand).toString()
             '-' -> (firstOperand - secondOperand).toString()
@@ -46,7 +45,6 @@ fun CalculatorApp() {
     fun onClearPress() {
         display = "0"
         firstOperand = 0.0
-        secondOperand = 0.0
         operation = null
         resetDisplay = false
     }
@@ -71,6 +69,11 @@ fun CalculatorApp() {
         }
     }
 
+    val displayText = when (operation) {
+        null -> display
+        else -> "$firstOperand $operation $display"
+    }
+
     MaterialTheme {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -78,7 +81,7 @@ fun CalculatorApp() {
         ) {
             // Display area
             Text(
-                text = display,
+                text = displayText,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
